@@ -2,6 +2,27 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "streamlit:dev",
+			"type": "shell",
+			"command": "\"C:/Users/DamianoPulvirenti/OneDrive - ITS Angelo Rizzoli/2025-26.IFTSAIDE - Materiali Didattici/MOD-10 Laboratorio d_Impresa - Project Work/2026-02-17_SocialManager/.venv/Scripts/python.exe\"",
+			"args": [
+				"-m",
+				"streamlit",
+				"run",
+				"app.py"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			}
+		},
+		{
 			"label": "backend:dev",
 			"type": "shell",
 			"command": "\"C:/Users/DamianoPulvirenti/OneDrive - ITS Angelo Rizzoli/2025-26.IFTSAIDE - Materiali Didattici/MOD-10 Laboratorio d_Impresa - Project Work/2026-02-17_SocialManager/.venv/Scripts/python.exe\"",
@@ -19,26 +40,11 @@
 			],
 			"isBackground": true,
 			"problemMatcher": [],
-			"group": "build"
-		},
-		{
-			"label": "frontend:dev",
-			"type": "shell",
-			"command": "npm",
-			"args": [
-				"--prefix",
-				"frontend",
-				"run",
-				"dev",
-				"--",
-				"--hostname",
-				"0.0.0.0",
-				"--port",
-				"3000"
-			],
-			"isBackground": true,
-			"problemMatcher": [],
-			"group": "build"
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			}
 		}
 	]
 }

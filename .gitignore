@@ -4,13 +4,20 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+.pytest_cache/
 
-# Node
+# Streamlit
+.streamlit/secrets.toml
+
+# Node (deprecato - rimuovere cartelle manualmente)
 node_modules/
 .npm/
 .npmrc
+frontend/
+package.json
+package-lock.json
 
-# Next.js
+# Next.js (deprecato)
 .next/
 out/
 
@@ -23,6 +30,7 @@ out/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
 
 # OS
 .DS_Store

@@ -1,8 +1,8 @@
 # Social Manager - MVP
 
-Piattaforma per la gestione social con automazione AI. Il progetto utilizza un'architettura monorepo con FastAPI per il backend e Next.js per il frontend.
+Piattaforma per la gestione social con automazione AI. Il progetto utilizza **Streamlit** come interfaccia principale con backend Python per logica business.
 
-Progetto pensato per tanti contributor: ogni team puo' usare le librerie che preferisce, con una coordinazione leggera delle dipendenze.
+Progetto pensato per tanti contributor: architettura semplificata con Python/Streamlit per prototipazione rapida.
 
 ## Team & Task Distribution
 
@@ -28,41 +28,42 @@ Progetto pensato per tanti contributor: ogni team puo' usare le librerie che pre
 - PM: Monitoraggio roadmap MVP e pianificazione release.
 
 ## Struttura del Progetto
-- /backend: API FastAPI e logica di integrazione AI.
-- /frontend: Interfaccia Next.js con design system basato su Tailwind.
+- `app.py`: Applicazione Streamlit principale (UI + logica)
+- `/backend`: Moduli Python per business logic e schemas
+- `requirements.txt`: Dipendenze Python unificate
 
-## Dipendenze coordinate
-- Regole leggere in [DEPENDENCIES.md](DEPENDENCIES.md).
-- Workspaces npm per il frontend.
-
-## Avvio Rapido (locale)
-
-Backend:
+## Stack Tecnologico
+- **Frontend/UI**: Streamlit (Python)
+- **Backend Logic**: Python + Pydantic schemas
+- **AI**: LangC
 
 ```bash
-cd backend
+# 1. Crea virtual environment
 python -m venv .venv
-# Windows: .venv\Scripts\activate | Unix: source .venv/bin/activate
+
+# 2. Attiva venv
+# Windows:
+.venv\Scripts\activate
+# Unix/macOS:
+source .venv/bin/activate
+
+# 3. Installa dipendenze
 pip install -r requirements.txt
-uvicorn main:app --reload
+
+# 4. Avvia Streamlit
+streamlit run app.py
 ```
 
-Frontend:
+L'app sarà disponibile su: http://localhost:8501
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+## Configurazione
+Duplica `.env.example` in `.env` e inserisci le variabili richieste.
 
-In alternativa, dal root:
-
-```bash
-npm install
-npm run frontend:dev
-```
-
-Backend: http://localhost:8000 (Docs: /docs)
+## Sviluppo
+- Modifica `app.py` per UI e flussi
+- Aggiungi logica business in `backend/`
+- Schemas Pydantic in `backend/schemas/`
+- Config Streamlit in `.streamlit/config.toml`
 Frontend: http://localhost:3000
 
 ## Configurazione
@@ -75,4 +76,8 @@ Linee guida in [CONTRIBUTING.md](CONTRIBUTING.md).
 - Backend: FastAPI + Python
 - Frontend: Next.js + Tailwind CSS
 - AI: OpenAI/Gemini API tramite LangChain
-- Icons: Lucide React
+- UI: Streamlit
+- Backend: Python + Pydantic
+- AI: LangChain + OpenAI/Gemini
+- Charts: Plotly
+- Database: MongoDB (Motor)

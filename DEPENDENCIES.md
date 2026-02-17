@@ -1,55 +1,56 @@
 # Dependency Coordination
 
-Questo progetto e' aperto a tante persone e librerie diverse. Per mantenere ordine, usiamo regole leggere.
+Progetto ora full-stack Python con Streamlit. Coordinazione semplificata con un unico `requirements.txt`.
 
-## Installazione Backend (Python)
+## Installazione (Python)
 
 Dal root del progetto:
 
 ```bash
-cd backend
+# Crea virtual environment
 python -m venv .venv
+
+# Attiva venv
 # Windows:
 .venv\Scripts\activate
 # Unix/macOS:
 source .venv/bin/activate
 
+# Installa dipendenze
 pip install -r requirements.txt
 ```
 
-Dipendenze principali:
-- `fastapi` - Framework web
-- `uvicorn` - ASGI server
-- `pydantic` - Validazione dati
+## Dipendenze Principali
+
+**Core:**
+- `streamlit` - Framework UI interattivo
+- `pydantic` - Validazione dati e schemas
+- `python-dotenv` - Gestione variabili env
+
+**AI & Backend:**
 - `langchain` - Orchestrazione AI
 - `openai` - API OpenAI (o Gemini)
 - `motor` - Driver MongoDB async
-- `python-dotenv` - Gestione .env
+- `fastapi` + `uvicorn` - API backend (opzionale)
 
-## Installazione Frontend (Node.js)
+**Visualizzazione:**
+- `plotly` - Grafici interattivi
+- `pandas` - Manipolazione dati
 
-Dal root del progetto:
+## Aggiungere Nuove Dipendenze
 
 ```bash
-npm install
-# oppure per installare solo nel workspace frontend:
-npm install -w frontend
+# Installa pacchetto
+pip install nome-pacchetto
+
+# Aggiorna requirements.txt
+pip freeze > requirements.txt
 ```
 
-Per aggiungere nuove librerie:
-```bash
-npm install -w frontend <pacchetto>
-```
+**IMPORTANTE**: Specifica versioni esatte per reproducibilità (es: `streamlit==1.40.2`)
 
-Dipendenze principali:
-- `next` - Framework React
-- `react` / `react-dom` - UI library
-- `tailwindcss` - CSS utility-first
-- `lucide-react` - Icon set (OBBLIGATORIO per coerenza UI)
-- `typescript` - Type safety
-
-## Regole leggere
-- Ogni nuova dipendenza deve avere una motivazione breve in PR.
-- Verifica la licenza prima di aggiungere librerie nuove.
-- Mantieni versioni compatibili tra team e segnala breaking changes.
-- Per le icone usa SOLO `lucide-react` (non altre librerie di icone).
+## Regole Leggere
+- Ogni nuova dipendenza deve avere una motivazione breve in PR
+- Verifica la licenza prima di aggiungere librerie nuove
+- Mantieni versioni esatte per reproducibilità
+- Testa compatibilità prima di aggiornare versioni major

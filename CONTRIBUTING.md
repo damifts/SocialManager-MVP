@@ -52,23 +52,21 @@ Grazie per il contributo al Social Manager MVP!
 
 ## Struttura Cartelle
 
-Mantieni la struttura esistente:
 ```
+app.py              # Streamlit main app
+requirements.txt    # Dipendenze Python
+.streamlit/
+  config.toml       # Config Streamlit
 backend/
-  app/          # Logica business
-  schemas/      # Modelli Pydantic
-  main.py       # Entry point
-frontend/
-  components/   # Componenti React
-  lib/          # Utilities e API client
-  types/        # TypeScript types
-  src/app/      # Next.js App Router
+  schemas/          # Modelli Pydantic
+  app/              # Logica business (opzionale)
+pages/              # Streamlit multi-page (se serve)
 ```
 
 ## Testing
 
-- Backend: test con `pytest` (da configurare)
-- Frontend: test con Jest/Testing Library (da configurare)
+- Python: test con `pytest` (da configurare)
+- Streamlit: test con `streamlit-testing` library
 - Segnala in PR se hai aggiunto test
 
 ## Review Process
