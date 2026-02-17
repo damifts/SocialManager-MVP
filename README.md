@@ -2,6 +2,8 @@
 
 Piattaforma per la gestione social con automazione AI. Il progetto utilizza un'architettura monorepo con FastAPI per il backend e Next.js per il frontend.
 
+Progetto pensato per tanti contributor: ogni team puo' usare le librerie che preferisce, con una coordinazione leggera delle dipendenze.
+
 ## Team & Task Distribution
 
 ### Core & DevOps (Damiano, Daniele, Davide)
@@ -29,6 +31,10 @@ Piattaforma per la gestione social con automazione AI. Il progetto utilizza un'a
 - /backend: API FastAPI e logica di integrazione AI.
 - /frontend: Interfaccia Next.js con design system basato su Tailwind.
 
+## Dipendenze coordinate
+- Regole leggere in [DEPENDENCIES.md](DEPENDENCIES.md).
+- Workspaces npm per il frontend.
+
 ## Avvio Rapido (locale)
 
 Backend:
@@ -49,11 +55,21 @@ npm install
 npm run dev
 ```
 
+In alternativa, dal root:
+
+```bash
+npm install
+npm run frontend:dev
+```
+
 Backend: http://localhost:8000 (Docs: /docs)
 Frontend: http://localhost:3000
 
 ## Configurazione
 Duplica `.env.example` in `.env` e inserisci le variabili richieste.
+
+## Contribuire
+Linee guida in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Tecnologie
 - Backend: FastAPI + Python
