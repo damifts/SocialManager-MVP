@@ -1,0 +1,44 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "backend:dev",
+			"type": "shell",
+			"command": "\"C:/Users/DamianoPulvirenti/OneDrive - ITS Angelo Rizzoli/2025-26.IFTSAIDE - Materiali Didattici/MOD-10 Laboratorio d_Impresa - Project Work/2026-02-17_SocialManager/.venv/Scripts/python.exe\"",
+			"args": [
+				"-m",
+				"uvicorn",
+				"main:app",
+				"--reload",
+				"--host",
+				"0.0.0.0",
+				"--port",
+				"8000",
+				"--app-dir",
+				"backend"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "frontend:dev",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"frontend",
+				"run",
+				"dev",
+				"--",
+				"--hostname",
+				"0.0.0.0",
+				"--port",
+				"3000"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}
