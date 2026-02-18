@@ -35,7 +35,21 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
+if "calendar_posts" not in st.session_state:
+    st.session_state.calendar_posts = [
+        {
+            "id": "1",
+            "title": "Lancio Nuovo Servizio (LinkedIn)",
+            "start": datetime.now().date().isoformat(),
+            "color": "#0077B5"
+        },
+        {
+            "id": "2",
+            "title": "Behind the scenes (Instagram)",
+            "start": datetime.now().date().isoformat(),
+            "color": "#E1306C"
+        }
+    ]
 # Custom CSS per design coerente
 st.markdown("""
 <style>
