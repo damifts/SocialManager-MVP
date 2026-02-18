@@ -208,10 +208,11 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 
 # 3. Installa dipendenze
-pip install -r requirements-base.txt
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -r requirements-base.txt
 
 # (Opzionale) Extras AI/DB
-pip install -r requirements-full.txt
+python -m pip install -r requirements-full.txt
 
 # 4. Imposta variabili d'ambiente
 $env:PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python"
@@ -223,6 +224,8 @@ python -m uvicorn main:app --reload --app-dir backend --port 8000
 # 5b. In un altro terminale, avvia Streamlit
 python -m streamlit run app.py
 ```
+
+**Nota integrazione manuale:** avvia sempre backend e frontend in due terminali separati per avere API e UI attive insieme.
 
 ---
 
