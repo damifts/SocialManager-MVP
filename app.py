@@ -14,6 +14,7 @@ import streamlit as st
 from datetime import datetime
 import sys
 from pathlib import Path
+from streamlit_calendar import calendar
 
 # Add backend to path for imports
 sys.path.append(str(Path(__file__).parent / "backend"))
@@ -243,26 +244,109 @@ elif page == "✨ Genera Post":
 # CALENDARIO PAGE - Issue #8: Body + Issue #7: Calendario editoriale
 # ============================================================================
 elif page == "📅 Calendario":
-    # Header Issue #9
     st.title("📅 Calendario Editoriale")
     st.markdown("Visualizza e gestisci i post programmati")
     st.markdown("---")
 
-    # TODO: Issue #7 - Thomas: Implementare vista calendario
-    # TODO: Issue #22 - Query post per range date da MongoDB
-    st.info("📋 TODO Thomas: Implementare vista calendario con post programmati (issue #7)")
-    st.markdown("### 📝 Post Programmati (Mock)")
+    # ======================
+    # COLORI SOCIAL
+    # ======================
+    def get_color(platform):
+        colors = {
+            "LinkedIn": "#0077B5",
+            "Instagram": "#E1306C",
+            "Twitter": "#1DA1F2",
+            "Facebook": "#1877F2"
+        }
+        return colors.get(platform, "#6b7280")
 
-    for i in range(3):
-        col1, col2, col3, col4 = st.columns([3, 2, 2, 1])
-        with col1:
-            st.write(f"Post esempio {i+1}: Contenuto social...")
-        with col2:
-            st.write(f"📅 {datetime.now().strftime('%d/%m/%Y')}")
-        with col3:
-            st.write("🔵 LinkedIn")
-        with col4:
-            st.button("✏️", key=f"edit_{i}")
+    col1, col2 = st.columns([3, 1])
+
+    # ======================
+    # CALENDARIO INTERATTIVO
+    # ======================
+    with col1:
+        calendar_options = {
+            "initialView": "dayGridMonth",
+            "locale": "it",
+            "headerToolbar": {
+                "left": "prev,next today",
+                "center": "title",
+                "right": "dayGridMonth,timeGridWeek,timeGridDay",
+            },
+            "editable": True,        # 🔥 Drag & Drop attivo
+            "selectable": True,      # 🔥 Selezione giorni
+        }
+
+        calendar_state = calendar(
+            events=st.session_state.calendar_posts,
+            options=calendar_options,
+            key="editorial_calendar"
+        )
+
+        # ======================
+        # DRAG & DROP UPDATE
+        # ======================
+        if calendar_state.get("eventDrop"):
+            moved_event = calendar_state["eventDrop"]["event"]
+            for event in st.session_state.calendar_posts:
+                if event["id"] == moved_event["id"]:
+                    event["start"] = moved_event["start"]
+            st.rerun()
+
+        # ======================
+        # CLICK EVENT
+        # ======================
+        if calendar_state.get("eventClick"):
+            clicked = calendar_state["eventClick"]["event"]
+            st.success(f"📌 Post selezionato: {clicked['title']}")
+
+    # ======================
+    # AGGIUNTA NUOVO POST
+    # ======================
+    with col2:
+        st.subheader("➕ Nuovo Post")
+
+        with st.form("add_calendar_post"):
+            titolo = st.text_input("Titolo")
+            social = st.selectbox(
+                "Social",
+                ["LinkedIn", "Instagram", "Twitter", "Facebook"]
+            )
+            data = st.date_input("Data pubblicazione")
+            submit = st.form_submit_button("Aggiungi")
+
+            if submit and titolo:
+                new_event = {
+                    "id": str(len(st.session_state.calendar_posts) + 1),
+                    "title": f"{titolo} ({social})",
+                    "start": data.isoformat(),
+                    "color": get_color(social)
+                }
+
+                st.session_state.calendar_posts.append(new_event)
+                st.success("Post aggiunto ✅")
+                st.rerun()
+
+        st.divider()
+
+        # ======================
+        # ELIMINAZIONE
+        # ======================
+        if st.session_state.calendar_posts:
+            selected = st.selectbox(
+                "🗑 Elimina Post",
+                st.session_state.calendar_posts,
+                format_func=lambda x: x["title"]
+            )
+
+            if st.button("Elimina"):
+                st.session_state.calendar_posts = [
+                    p for p in st.session_state.calendar_posts
+                    if p["id"] != selected["id"]
+                ]
+                st.warning("Post eliminato")
+                st.rerun()
 
 # ============================================================================
 # ANALYTICS PAGE - Issue #8: Body + Dashboard analytics
