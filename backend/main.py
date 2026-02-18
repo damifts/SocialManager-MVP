@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from datetime import datetime
-from app.routes import router as api_router
+from backend.app.routes import router as api_router
+
 
 app = FastAPI(title="Social Manager API", version="0.1.0")
 
@@ -15,11 +14,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(
+    api_router,
+    prefix="/users",
+    tags=["Utente"]
+)
 
+
+
+
+'''
 # Health check
 @app.get("/")
 def root():
     return {"status": "ok", "message": "Social Manager API"}
+
 
 
 # TODO: Andrea/Filippo - Integrare LangChain e OpenAI/Gemini per generazione reale
@@ -48,3 +57,4 @@ def generate_content(request: GenerateRequest):
 
 
 app.include_router(api_router, prefix="/api")
+'''

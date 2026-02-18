@@ -1,3 +1,5 @@
+''''
+
 """
 Social Manager MVP - Streamlit App
 Issues predisposte:
@@ -8,7 +10,6 @@ Issues predisposte:
 - #15, #12, #10: Gemini AI integration (predisposto, da configurare)
 
 TODO: Configurare .env con MONGO_URI e GEMINI_API_KEY
-"""
 
 import streamlit as st
 from datetime import datetime
@@ -220,8 +221,8 @@ elif page == "✨ Genera Post":
         # TODO: Issue #8 - Programmazione pubblicazione
         data_programmazione = st.date_input("📅 Data pubblicazione")
         ora_programmazione = st.time_input("⏰ o con successo!")
-            else:
-                st.warning("Inserisci una descrizione per generare il post")
+            
+            
     
     with col2:
         st.subheader("Impostazioni")
@@ -233,7 +234,8 @@ elif page == "✨ Genera Post":
             # Badge social
             social_emoji = {
                 "linkedin": "🔵",
-  ============================================================================
+            }
+#  ============================================================================
 # CALENDARIO PAGE - Issue #8: Body + Issue #7: Calendario editoriale
 # ============================================================================
 elif page == "📅 Calendario":
@@ -258,7 +260,7 @@ elif page == "📅 Calendario":
     st.markdown("### 📝 Post Programmati (Mock)")
     
     # TODO: Sostituire con:
-  ============================================================================
+#============================================================================
 # ANALYTICS PAGE - Issue #8: Body + Dashboard analytics
 # ============================================================================
 elif page == "📊 Analytics":
@@ -345,3 +347,4 @@ elif page == "📊 Analytics":
 # Footer
 st.markdown("---")
 st.caption("Social Manager MVP - Powered by Streamlit & AI")
+'''
