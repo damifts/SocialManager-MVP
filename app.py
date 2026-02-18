@@ -197,12 +197,19 @@ elif page == "✨ Genera Post":
         
         col_a, col_b = st.columns(2)
         with col_a:
-            social_target = st.selectbox(, "Umoristico"]
+            social_target = st.selectbox(
+                "Social target",
+                ["LinkedIn", "Instagram", "Twitter", "Facebook"]
             )
-        
+        with col_b:
+            tone = st.selectbox(
+                "Tono",
+                ["Professionale", "Informativo", "Ispirazionale", "Umoristico"]
+            )
+
         # TODO: Issue #10 - I toni sono definiti in backend/ai/prompts.py
         # Quando Gemini configurato, passare tono al generator
-        
+
         if st.button("🚀 Genera Post", type="primary", use_container_width=True):
             if prompt:
                 with st.spinner("✨ Generazione in corso con AI..."):
@@ -210,30 +217,29 @@ elif page == "✨ Genera Post":
                     generated = generate_content_mock(prompt, social_target)
                     st.session_state.generated_text = generated
                     st.session_state.social_target = social_target.lower()
+                    st.session_state.tone = tone.lower()
                     st.success("✅ Post generato con successo!")
             else:
                 st.warning("⚠️ Inserisci una descrizione per generare il post")
-    
+
     with col2:
         st.subheader("⚙️ Impostazioni")
-        
+
         # TODO: Issue #8 - Programmazione pubblicazione
         data_programmazione = st.date_input("📅 Data pubblicazione")
-        ora_programmazione = st.time_input("⏰ o con successo!")
-            else:
-                st.warning("Inserisci una descrizione per generare il post")
-    
-    with col2:
-        st.subheader("Impostazioni")
-        Issue #6 - Preview con formattazione social-specific
+        ora_programmazione = st.time_input("⏰ Ora pubblicazione")
+        st.checkbox("Programma automaticamente", value=False)
+
+        # TODO: Issue #6 - Preview con formattazione social-specific
         # TODO: Patrick - Preview formattata per ogni social
         if "generated_text" in st.session_state:
             st.subheader("👁️ Preview")
-            
-            # Badge social
-            social_emoji = {
-                "linkedin": "🔵",
-  ============================================================================
+            st.info(st.session_state.generated_text)
+
+            if st.button("💾 Salva Bozza", use_container_width=True):
+                st.success("Bozza salvata! (TODO: DB integration)")
+
+# ============================================================================
 # CALENDARIO PAGE - Issue #8: Body + Issue #7: Calendario editoriale
 # ============================================================================
 elif page == "📅 Calendario":
@@ -241,71 +247,12 @@ elif page == "📅 Calendario":
     st.title("📅 Calendario Editoriale")
     st.markdown("Visualizza e gestisci i post programmati")
     st.markdown("---")
-    
+
     # TODO: Issue #7 - Thomas: Implementare vista calendario
     # TODO: Issue #22 - Query post per range date da MongoDB
     st.info("📋 TODO Thomas: Implementare vista calendario con post programmati (issue #7)")
-    st.markdown("""
-    **Features da implementare:**
-    - Vista mensile con st.columns() grid
-    - Filtri per social network (sidebar)
-    - Click su giorno → dettagli post
-    - Badge colorati per status (draft/scheduled/published)
-    - Drag & drop per rimuovere data (future feature)
-    """)
-    
-    # Mock data
     st.markdown("### 📝 Post Programmati (Mock)")
-    
-    # TODO: Sostituire con:
-  ============================================================================
-# ANALYTICS PAGE - Issue #8: Body + Dashboard analytics
-# ============================================================================
-elif page == "📊 Analytics":
-    # Header Issue #9
-    st.title("📊 Analytics & Insights")
-    st.markdown("Monitora performance e engagement dei tuoi post")
-    st.markdown("---")
-    
-    # TODO: Issue #8 - Danilo: Implementare dashboard analytics
-    # TODO: PostDAO.get_analytics_data() per metriche reali
-    st.info("📈 TODO Danilo: Implementare dashboard analytics con metriche engagement (issue #8)")
-    st.markdown("""
-    **Features da implementare:**
-    - Aggregazioni MongoDB per stats
-    - Filtri temporali (ultima settimana/mese/anno)
-    - Confronto performance per social
-    - Export report CSV/PDF
-    - Insights automatici AI (future)
-    ""
-        col1, col2, col3, col4 = st.columns([3, 2, 2, 1])
-        with col1:
-            st.write(f"Post esempio {i+1}: Contenuto social...")
-        with col2:
-            st.write(f"📅 {datetime.now().strftime('%d/%m/%Y')}")
-        with col3:
-            st.write("🔵 LinkedIn")
-        with col4:
-            if st.button("✏️", key=f"edit_{i}"):
-                st.info("TODO: Edit modal (issue #23)
-                if st.button("📤 Programma", use_container_width=True):
-                    st.success("✅ Post programmato! (TODO: DB + scheduler)")
-                    # TODO: Issue #23 - Update status a "scheduled"
-        if "generated_text" in st.session_state:
-            st.subheader("Preview")
-            st.info(st.session_state.generated_text)
-            
-            if st.button("💾 Salva Bozza", use_container_width=True):
-                st.success("Bozza salvata! (TODO: DB integration)")
 
-# Calendario Page
-elif page == "📅 Calendario":
-    st.title("📅 Calendario Editoriale")
-    st.info("📋 TODO: Thomas - Implementare vista calendario con post programmati")
-    
-    # Mock data
-    st.markdown("### Post Programmati")
-    
     for i in range(3):
         col1, col2, col3, col4 = st.columns([3, 2, 2, 1])
         with col1:
