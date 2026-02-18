@@ -4,6 +4,29 @@ Piattaforma completa per la **gestione social con automazione AI**. Generazione 
 
 ## 🎯 Quick Start
 
+### ⚡ Metodo Rapido (Consigliato)
+
+```powershell
+# Windows PowerShell
+.\setup.ps1
+
+# Oppure Windows CMD
+setup.bat
+
+# Oppure Mac/Linux
+bash setup.sh
+```
+
+**Setup automatico in ~60 secondi:**
+- Crea environment virtuale Python
+- Installa tutte le dipendenze
+- Configura `.env`
+- Menu interattivo per avvio app
+
+👉 **[Leggi QUICKSTART.md per guida dettagliata](QUICKSTART.md)**
+
+### Metodo Manuale (Alternativa)
+
 ```bash
 # 1. Clone e setup
 git clone <repo>
@@ -23,13 +46,51 @@ python -m uvicorn main:app --reload --app-dir backend --port 8000  # Terminal 2:
 
 ## 📋 Indice
 
-- [Architettura](#architettura)
-- [Setup Completo](#setup-completo)
-- [Configurazione Servizi](#configurazione-servizi)
-- [Issues Predisposte](#issues-predisposte)
-- [Team & Responsabilità](#team--responsabilità)
-- [Sviluppo](#sviluppo)
-- [Troubleshooting](#troubleshooting)
+- [📱 Quick Start](#-quick-start) ← **Inizia da qui!**
+- [🏗️ Architettura](#architettura)
+- [⚙️ Setup Automatizzato](#-setup-automatizzato) (Nuovo!)
+- [🚀 Setup Completo](#setup-completo)
+- [⚙️ Configurazione Servizi](#configurazione-servizi)
+- [📌 Issues Predisposte](#issues-predisposte)
+- [👥 Team & Responsabilità](#team--responsabilità)
+- [💻 Sviluppo](#sviluppo)
+- [🔧 Troubleshooting](#troubleshooting)
+
+---
+
+## ⚙️ Setup Automatizzato
+
+### 📖 Guida Rapida per Colleghi
+
+👉 **[VEDI QUICKSTART.md](QUICKSTART.md)** per una guida semplificata e adatta a chi non ha familiarità con il terminale.
+
+### 🤖 Script Disponibili
+
+Abbiamo creato script automatici per tutte le piattaforme:
+
+| Piattaforma | Script | Comando |
+|-----------|--------|----------|
+| **Windows (PowerShell)** | `setup.ps1` | `.\setup.ps1` |
+| **Windows (CMD)** | `setup.bat` | `setup.bat` |
+| **Mac/Linux (Bash)** | `setup.sh` | `bash setup.sh` |
+
+### Cosa Fa il Setup Automatico
+
+✅ Verifica Python 3.8+  
+✅ Crea ambiente virtuale `.venv`  
+✅ Installa dipendenze da `requirements.txt`  
+✅ Crea file `.env` con template  
+✅ Mostra menu per avvio app  
+
+### Menu Interattivo
+
+Dopo il setup, scegli:
+
+1. **Avvio Completo** → Streamlit + Backend in 2 finestre
+2. **Solo Streamlit** → Frontend (http://localhost:8501)
+3. **Solo Backend** → API (http://localhost:8000/docs)
+4. **Test MongoDB** → Verifica connessione DB
+5. **Esci**
 
 ---
 
@@ -386,6 +447,11 @@ st.set_page_config(cache_resource_ttl=0)
 
 ## 📚 Linee Guida Sviluppo
 
+### Setup Progetto
+- **Per Team Members**: Usa script automatico (`setup.ps1`, `setup.bat`, `setup.sh`)
+- **Per Developers**: Leggi [Sviluppo → Aggiungere Nuova Feature](#aggiungere-nuova-feature)
+- **Guida Rapida**: [QUICKSTART.md](QUICKSTART.md)
+
 ### Style Guide
 - **Python**: PEP 8 (use `black` formatter)
 - **Commits**: Conventional Commits (`fix:`, `feat:`, `docs:`)
@@ -395,22 +461,34 @@ st.set_page_config(cache_resource_ttl=0)
 - Unit tests in `backend/tests/`
 - Test database queries con `pytest`
 - Test Gemini con `test_gemini.py`
+- Usa `python verify_mongodb.py` per test MongoDB
 
 ### Documentation
 - README aggiornato ad ogni major release
+- QUICKSTART.md per onboarding team members
 - Docstrings in tutte le funzioni
 - Issues linkate nei commits
 
 ---
 
-## 📖 Riferimenti Ulteriori
+## 📖 Documentazione Progetto
 
+### 🚀 Per Iniziare
+- **[QUICKSTART.md](QUICKSTART.md)** - Guida rapida per nuovi team members
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Come contribuire
+
+### 📚 Approfondimenti
+- **[docs/API.md](docs/API.md)** - Documentazione API FastAPI
+- **[docs/BACKEND.md](docs/BACKEND.md)** - Architettura backend
+- **[docs/DATABASE.md](docs/DATABASE.md)** - Schema MongoDB
+- **[docs/INDEX.md](docs/INDEX.md)** - Hub documentazione centralizzato
+- **[scripts/README.md](scripts/README.md)** - DevOps & webhook testing
+
+### 🔗 Risorse Esterne
 - [Streamlit Docs](https://docs.streamlit.io/)
 - [FastAPI Docs](https://fastapi.tiangolo.com/)
 - [MongoDB Python Docs](https://pymongo.readthedocs.io/)
 - [Google AI Studio](https://aistudio.google.com/)
-- [Contributing Guide](CONTRIBUTING.md)
-- [Migration Guide (Next.js → Streamlit)](MIGRATION_STREAMLIT.md)
 
 ---
 
@@ -432,6 +510,7 @@ Leggi [CONTRIBUTING.md](CONTRIBUTING.md) per le linee guida complete.
 
 ---
 
-**Versione**: 0.2.0 (MVP)  
+**Versione**: 0.3.0 (MVP + DevOps)  
 **Team**: ITS Angelo Rizzoli - MOD-10 Laboratorio d'Impresa  
+**Setup Scripts**: ✅ PowerShell | ✅ Batch | ✅ Bash  
 **Last Updated**: Feb 18, 2026

@@ -2,6 +2,19 @@
 
 Test suite per Social Manager MVP.
 
+## Setup Rapido
+
+Per eseguire i test dopo il setup automatico:
+
+```powershell
+# Usa il menu setup script e seleziona opzione 4 "Test MongoDB"
+.\setup.ps1
+# Oppure avvia i test manualmente:
+python tests/verify_mongodb.py
+```
+
+---
+
 ## Test Files
 
 ### `verify_mongodb.py`

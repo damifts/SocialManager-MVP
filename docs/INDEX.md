@@ -6,15 +6,43 @@ Central documentation hub for Social Manager MVP.
 
 ### [README.md](../README.md) - Start Here! 🚀
 Complete guide with:
-- Quick start (3-minute setup)
+- Quick start (setup scripts - 60 seconds)
+- Setup automatizzato for team members
 - Architecture overview
 - Full configuration instructions
 - Team responsibilities
 - Troubleshooting
 - Development guidelines
 
+### [QUICKSTART.md](../QUICKSTART.md) - For Team Members ⚡
+Simplified getting-started guide:
+- How to run setup scripts
+- What each script does
+- Troubleshooting common issues
+- No terminal experience needed!
+
 ### [CONTRIBUTING.md](../CONTRIBUTING.md)
 Contribution guidelines for developers.
+
+---
+
+## Setup & Automation
+
+### Setup Scripts
+
+For automated environment setup across all platforms:
+- **[setup.ps1](../setup.ps1)** - Windows PowerShell
+- **[setup.bat](../setup.bat)** - Windows CMD
+- **[setup.sh](../setup.sh)** - Mac/Linux Bash
+
+See [QUICKSTART.md](../QUICKSTART.md) for usage.
+
+### DevOps
+
+- **[scripts/README.md](../scripts/README.md)** - Automation utilities
+  - Webhook testing scripts
+  - Integration testing
+  - Development tools
 
 ---
 
