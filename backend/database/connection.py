@@ -158,3 +158,16 @@ def get_database_sync():
         except Exception as e:
             raise RuntimeError(f"Connessione sincrona fallita: {e}")
     return _database
+
+
+
+async def main():
+ await connect_to_mongodb()
+
+ await verify_connection()
+
+ print("Tutto a posto")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
