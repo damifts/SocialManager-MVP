@@ -24,6 +24,7 @@ class richiesteClass:
   
   
      req = httpx.get(url=url_base,params=params)
+     req.raise_for_status()
   
      res = req.json()
   
@@ -55,6 +56,8 @@ class richiesteClass:
       
         req = httpx.post(url=url_base,headers=headers,json=payload, timeout=30.0)
 
+        req.raise_for_status()
+
         res = req.json()
 
         return res
@@ -84,6 +87,8 @@ class richiesteClass:
 
         req = httpx.post(url=url_base, params=payload,headers=headers)
 
+        req.raise_for_status()
+
         res = req.json()
 
         return res
@@ -104,6 +109,8 @@ class richiesteClass:
     try:
     
       req = httpx.get(url=url_base, params=params)
+
+      req.raise_for_status()
 
       ris = req.json()
 
