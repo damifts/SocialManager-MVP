@@ -73,8 +73,8 @@ class PostDAO(BaseDAO):
             "metadata": { # Inizializziamo i metadati a zero
                 "views": 0, "likes": 0, "comments": 0, "shares": 0
             },
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
+            "created_at": datetime.now(),
+            "updated_at": datetime.now()
         }
         
         # 4. Logica Programmazione

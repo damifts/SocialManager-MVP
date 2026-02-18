@@ -30,7 +30,7 @@ class BaseDAO(Generic[T]):
     async def insert_one(self, document: Dict[str, Any]) -> str:
         """Issue #21: Inserimento con validazione e timestamp."""
         # Aggiunta timestamp automatici
-        document["created_at"] = datetime.utcnow()
+        document["created_at"] = datetime.now()
         document["updated_at"] = document["created_at"]
         document["is_deleted"] = False # Per Soft Delete
 
@@ -76,7 +76,7 @@ class BaseDAO(Generic[T]):
     # --- UPDATE ---
     async def update_one(self, filter_query: Dict[str, Any], update_data: Dict[str, Any]) -> bool:
         """Aggiornamento con timestamp automatico."""
-        update_data["updated_at"] = datetime.utcnow()
+        update_data["updated_at"] = datetime.now()
         
         # Impediamo che l'aggiornamento tocchi documenti cancellati
         filter_query["is_deleted"] = {"$ne": True}
@@ -102,7 +102,7 @@ class BaseDAO(Generic[T]):
                 filter_query,
                 {"$set": {
                     "is_deleted": True,
-                    "deleted_at": datetime.utcnow()
+                    "deleted_at": datetime.now()
                 }}
             )
             logger.info(f"SOFT DELETE eseguito su {filter_query}")
