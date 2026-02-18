@@ -264,14 +264,22 @@ elif page == "📅 Calendario":
         with col4:
             st.button("✏️", key=f"edit_{i}")
 
-# Analytics Page
+# ============================================================================
+# ANALYTICS PAGE - Issue #8: Body + Dashboard analytics
+# ============================================================================
 elif page == "📊 Analytics":
+    # Header Issue #9
     st.title("📊 Analytics & Insights")
-    st.info("📈 TODO: Danilo - Implementare dashboard analytics con metriche engagement")
-    
+    st.markdown("Monitora performance e engagement dei tuoi post")
+    st.markdown("---")
+
+    # TODO: Issue #8 - Danilo: Implementare dashboard analytics
+    # TODO: PostDAO.get_analytics_data() per metriche reali
+    st.info("📈 TODO Danilo: Implementare dashboard analytics con metriche engagement (issue #8)")
+
     # Mock charts
     col1, col2 = st.columns(2)
-    
+
     with col1:
         st.subheader("Views Settimanali")
         import random
@@ -280,7 +288,7 @@ elif page == "📊 Analytics":
             "Views": [random.randint(100, 1000) for _ in range(7)]
         }
         st.line_chart(chart_data, x="Giorno", y="Views")
-    
+
     with col2:
         st.subheader("Engagement per Social")
         chart_data = {
