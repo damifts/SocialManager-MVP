@@ -10,7 +10,7 @@ TODO: Team AI (Andrea, Filippo)
 """
 
 import os
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, ListS
 import google.generativeai as genai
 from dotenv import load_dotenv
 
