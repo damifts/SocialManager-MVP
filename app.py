@@ -1,3 +1,5 @@
+''''
+
 """
 Social Manager MVP - Streamlit App
 Issues predisposte:
@@ -8,7 +10,6 @@ Issues predisposte:
 - #15, #12, #10: Gemini AI integration (predisposto, da configurare)
 
 TODO: Configurare .env con MONGO_URI e GEMINI_API_KEY
-"""
 
 import streamlit as st
 from datetime import datetime
