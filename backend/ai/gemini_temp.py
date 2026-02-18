@@ -1,6 +1,6 @@
 import os
-from google import genai
-from google.genai.types import GenerateContentConfig
+
+import google.generativeai as genai
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -9,7 +9,7 @@ api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
     raise ValueError("GEMINI_API_KEY non trovata nel file .env")
 
-client = genai.Client(api_key=api_key)
+genai.configure(api_key=api_key)
 
 
 class InstagramPost:
@@ -35,10 +35,11 @@ HASHTAGS: <lista hashtag separati da spazi>
 CALL-TO-ACTION: <frase di invito all'azione>"""
 
     def __init__(self):
-        self.chat = client.chats.create(
-            model="gemini-2.5-flash-lite",
-            config=GenerateContentConfig(system_instruction=self.SYSTEM_PROMPT)
+        model = genai.GenerativeModel(
+            model_name="gemini-pro",
+            system_instruction=self.SYSTEM_PROMPT,
         )
+        self.chat = model.start_chat(history=[])
 
     def generate_post(self, user_prompt: str) -> InstagramPost:
         response = self.chat.send_message(user_prompt)
