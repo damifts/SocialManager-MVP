@@ -92,15 +92,21 @@ print_success "Ambiente virtuale attivato"
 
 print_header "STEP 3: Installazione Dipendenze"
 
-if [ -f "requirements.txt" ]; then
-    print_info "Installazione dipendenze da requirements.txt..."
-    
+if [ -f "requirements-base.txt" ]; then
+    print_info "Installazione dipendenze base..."
+
     pip install --upgrade pip setuptools wheel > /dev/null 2>&1
-    pip install -r requirements.txt
-    
+    pip install -r requirements-base.txt
+
+    if [ "$SM_FULL" = "1" ] && [ -f "requirements-full.txt" ]; then
+        print_warning "Installazione FULL: include extras MongoDB/Gemini."
+        pip install -r requirements-full.txt
+    fi
+
     print_success "Dipendenze installate"
+    print_info "Per extras: SM_FULL=1 bash setup.sh"
 else
-    print_error "requirements.txt non trovato"
+    print_error "requirements-base.txt non trovato"
     exit 1
 fi
 
@@ -140,99 +146,9 @@ fi
 print_success "Configurazione completata"
 
 # ============================================================================
-# STEP 5: Mostra menu di avvio
+# STEP 5: Avvio Applicazione
 # ============================================================================
 
-print_header "STEP 5: Avvio Applicazione"
-
-echo "Scegli come avviare l'applicazione:"
-echo ""
-echo -e "  ${CYAN}1️⃣  Avvio completo (Streamlit + Backend)${NC}"
-echo -e "  ${CYAN}2️⃣  Solo Streamlit (Frontend)${NC}"
-echo -e "  ${CYAN}3️⃣  Solo Backend (API)${NC}"
-echo -e "  ${CYAN}4️⃣  Test connessione MongoDB${NC}"
-echo -e "  ${CYAN}5️⃣  Esci${NC}"
-echo ""
-
-read -p "Seleziona un'opzione (1-5): " choice
-
-case $choice in
-    1)
-        print_header "Avvio Completo: Streamlit + Backend"
-        
-        print_info "Il backend sarà disponibile su: http://localhost:8000"
-        print_info "Streamlit sarà disponibile su: http://localhost:8501"
-        echo ""
-        
-        echo "Scegli come avviare:"
-        echo -e "  ${CYAN}A) In 2 terminali separati (consigliato)${NC}"
-        echo -e "  ${CYAN}B) Avvia solo backend, lancio manuale Streamlit${NC}"
-        echo ""
-        
-        read -p "Seleziona (A/B): " launch_choice
-        
-        if [ "$launch_choice" = "A" ] || [ "$launch_choice" = "a" ]; then
-            echo ""
-            print_info "Apertura terminali separati..."
-            
-            # Backend in sfondo
-            print_success "Avvio Backend..."
-            export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-            python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000 --app-dir backend &
-            BACKEND_PID=$!
-            
-            sleep 3
-            
-            # Streamlit nel terminale attuale
-            print_success "Avvio Streamlit..."
-            python -m streamlit run app.py
-            
-            # Se Streamlit termina, termina anche Backend
-            kill $BACKEND_PID 2>/dev/null || true
-        else
-            print_warning "Avvio Backend. Apri un altro terminale per Streamlit."
-            export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-            python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000 --app-dir backend
-        fi
-        ;;
-    
-    2)
-        print_header "Avvio Streamlit (Frontend)"
-        print_info "Streamlit sarà disponibile su: http://localhost:8501"
-        echo ""
-        python -m streamlit run app.py
-        ;;
-    
-    3)
-        print_header "Avvio Backend (API)"
-        print_info "Backend sarà disponibile su: http://localhost:8000"
-        print_info "Documentazione API: http://localhost:8000/docs"
-        echo ""
-        export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-        python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000 --app-dir backend
-        ;;
-    
-    4)
-        print_header "Test Connessione MongoDB"
-        print_info "Esecuzione test MongoDB..."
-        echo ""
-        
-        if [ -f "tests/verify_mongodb.py" ]; then
-            python tests/verify_mongodb.py
-        elif [ -f "verify_mongodb.py" ]; then
-            python verify_mongodb.py
-        else
-            print_error "Script verify_mongodb.py non trovato"
-        fi
-        ;;
-    
-    5)
-        print_info "Uscita"
-        exit 0
-        ;;
-    
-    *)
-        print_error "Opzione non valida"
-        exit 1
-        ;;
-esac
+print_header "SETUP COMPLETATO"
+print_info "Avvio app: bash start.sh"
+print_info "Extras opzionali: SM_FULL=1 bash setup.sh"

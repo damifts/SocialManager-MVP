@@ -35,6 +35,11 @@ For automated environment setup across all platforms:
 - **[setup.bat](../setup.bat)** - Windows CMD
 - **[setup.sh](../setup.sh)** - Mac/Linux Bash
 
+Start scripts:
+- **[start.ps1](../start.ps1)** - Windows PowerShell
+- **[start.bat](../start.bat)** - Windows CMD
+- **[start.sh](../start.sh)** - Mac/Linux Bash
+
 See [QUICKSTART.md](../QUICKSTART.md) for usage.
 
 ### DevOps
@@ -102,7 +107,9 @@ See [QUICKSTART.md](../QUICKSTART.md) for usage.
 SocialManager-MVP/
 ├── README.md                    ← Start here
 ├── CONTRIBUTING.md              ← Contribution guidelines
-├── requirements.txt             ← Python dependencies
+├── requirements.txt             ← Puntatore a requirements-base.txt
+├── requirements-base.txt        ← Dipendenze base
+├── requirements-full.txt        ← Extras opzionali
 ├── .env.example                 ← Environment template
 ├── app.py                       ← Streamlit main app
 ├── backend/                     ← FastAPI backend

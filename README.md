@@ -9,19 +9,22 @@ Piattaforma completa per la **gestione social con automazione AI**. Generazione 
 ```powershell
 # Windows PowerShell
 .\setup.ps1
+.\start.ps1
 
 # Oppure Windows CMD
 setup.bat
+start.bat
 
 # Oppure Mac/Linux
 bash setup.sh
+bash start.sh
 ```
 
 **Setup automatico in ~60 secondi:**
 - Crea environment virtuale Python
-- Installa tutte le dipendenze
+- Installa dipendenze base
 - Configura `.env`
-- Menu interattivo per avvio app
+- Avvio separato con script `start.*`
 
 👉 **[Leggi QUICKSTART.md per guida dettagliata](QUICKSTART.md)**
 
@@ -35,7 +38,7 @@ python -m venv .venv
 .venv\Scripts\activate  # Windows / source .venv/bin/activate (Mac/Linux)
 
 # 2. Installa dipendenze
-pip install -r requirements.txt
+pip install -r requirements-base.txt
 
 # 3. Avvia (in due terminali)
 streamlit run app.py              # Terminal 1: Frontend (http://localhost:8501)
@@ -78,19 +81,15 @@ Abbiamo creato script automatici per tutte le piattaforme:
 
 ✅ Verifica Python 3.8+  
 ✅ Crea ambiente virtuale `.venv`  
-✅ Installa dipendenze da `requirements.txt`  
+✅ Installa dipendenze base da `requirements-base.txt`  
 ✅ Crea file `.env` con template  
-✅ Mostra menu per avvio app  
+✅ Avvio separato con `start.*`  
 
-### Menu Interattivo
+### Avvio Applicazione
 
-Dopo il setup, scegli:
-
-1. **Avvio Completo** → Streamlit + Backend in 2 finestre
-2. **Solo Streamlit** → Frontend (http://localhost:8501)
-3. **Solo Backend** → API (http://localhost:8000/docs)
-4. **Test MongoDB** → Verifica connessione DB
-5. **Esci**
+- PowerShell: `./start.ps1`
+- CMD: `start.bat`
+- Mac/Linux: `bash start.sh`
 
 ---
 
@@ -99,16 +98,18 @@ Dopo il setup, scegli:
 ### Stack Tecnologico
 - **Frontend**: Streamlit (Python + UI components)
 - **Backend**: FastAPI + Python
-- **AI**: Google Gemini API (LangChain optional)
-- **Database**: MongoDB (Motor async driver)
-- **Charts**: Plotly per analytics
+- **AI**: Google Gemini API (optional)
+- **Database**: MongoDB (optional)
+- **Charts**: Streamlit charts (builtin)
 - **Schemas**: Pydantic per validation
 
 ### Struttura Progetto
 ```
 SocialManager-MVP/
 ├── app.py                      # Streamlit app principale
-├── requirements.txt            # Python dependencies
+├── requirements.txt            # Puntatore a requirements-base.txt
+├── requirements-base.txt       # Dipendenze base
+├── requirements-full.txt       # Extras opzionali
 ├── verify_mongodb.py          # Test MongoDB connection
 ├── test_gemini.py             # Test Gemini API
 ├── backend/
@@ -163,17 +164,23 @@ source .venv/bin/activate
 ### 3️⃣ Installa Dipendenze
 
 ```bash
-pip install -r requirements.txt
+# Base (consigliato per setup rapido)
+pip install -r requirements-base.txt
+
+# Extras opzionali (AI/DB)
+pip install -r requirements-full.txt
 ```
 
-**Dipendenze principali:**
+**Dipendenze principali (base):**
 - `streamlit==1.40.2` - Frontend UI
 - `fastapi==0.115.0` + `uvicorn==0.30.6` - Backend API
-- `pymongo==4.10.1` + `motor==3.7.0` - MongoDB drivers
-- `google-generativeai==0.3.2` - Gemini AI
 - `pydantic==2.10.5` - Data validation
-- `plotly==5.24.1` - Charts
+- `httpx==0.27.2` - HTTP client per backend
 - `python-dotenv==1.0.1` - Environment variables
+
+**Extras opzionali (SM_FULL=1):**
+- `motor==3.7.0` + `pymongo==4.10.1` - MongoDB drivers
+- `google-generativeai==0.3.2` - Gemini AI
 
 ### 4️⃣ Configurazione Variabili Ambiente
 
@@ -403,7 +410,7 @@ rm -rf .streamlit/__pycache__ backend/__pycache__
 source .venv/bin/activate  # Mac/Linux
 
 # Reinstalla
-pip install -r requirements.txt
+pip install -r requirements-base.txt
 ```
 
 ### ❌ "ConnectionFailure: MongoDB connection error"

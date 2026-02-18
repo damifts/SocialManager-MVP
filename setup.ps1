@@ -21,30 +21,30 @@ $Cyan = @{ ForegroundColor = "Cyan" }
 function Write-Header {
     param([string]$Text)
     Write-Host ""
-    Write-Host "╔════════════════════════════════════════════════════════════════╗" @Cyan
-    Write-Host "║ $($Text.PadRight(62)) ║" @Cyan
-    Write-Host "╚════════════════════════════════════════════════════════════════╝" @Cyan
+    Write-Host "================================================================" @Cyan
+    Write-Host " $Text" @Cyan
+    Write-Host "================================================================" @Cyan
     Write-Host ""
 }
 
 function Write-Info {
     param([string]$Text)
-    Write-Host "ℹ️  $Text"
+    Write-Host "[INFO] $Text"
 }
 
 function Write-Success {
     param([string]$Text)
-    Write-Host "✅ $Text" @Green
+    Write-Host "[OK]  $Text" @Green
 }
 
 function Write-Error-Custom {
     param([string]$Text)
-    Write-Host "❌ $Text" @Red
+    Write-Host "[ERR] $Text" @Red
 }
 
 function Write-Warning-Custom {
     param([string]$Text)
-    Write-Host "⚠️  $Text" @Yellow
+    Write-Host "[WARN] $Text" @Yellow
 }
 
 # ============================================================================
@@ -80,7 +80,7 @@ Write-Header "STEP 2: Ambiente Virtuale"
 $venvPath = ".venv"
 
 if (Test-Path $venvPath) {
-    Write-Info "Ambiente virtuale già esistente: $venvPath"
+    Write-Info "Ambiente virtuale gia esistente: $venvPath"
 } else {
     Write-Info "Creazione ambiente virtuale..."
     python -m venv $venvPath
@@ -97,17 +97,26 @@ Write-Success "Ambiente virtuale attivato"
 
 Write-Header "STEP 3: Installazione Dipendenze"
 
-if (Test-Path "requirements.txt") {
-    Write-Info "Installazione dipendenze da requirements.txt..."
+$baseReq = "requirements-base.txt"
+$fullReq = "requirements-full.txt"
+
+if (Test-Path $baseReq) {
+    Write-Info "Installazione dipendenze base..."
     $startTime = Get-Date
-    
-    pip install --upgrade pip setuptools wheel | Out-Null
-    pip install -r requirements.txt
-    
+
+    python -m pip install --upgrade pip setuptools wheel | Out-Null
+    python -m pip install -r $baseReq
+
+    if ($env:SM_FULL -eq "1" -and (Test-Path $fullReq)) {
+        Write-Warning-Custom "Installazione FULL: include extras MongoDB/Gemini."
+        python -m pip install -r $fullReq
+    }
+
     $duration = (Get-Date) - $startTime
     Write-Success "Dipendenze installate in $($duration.TotalSeconds.ToString("F1")) secondi"
+    Write-Info "Per extras: SM_FULL=1 .\setup.ps1"
 } else {
-    Write-Error-Custom "requirements.txt non trovato"
+    Write-Error-Custom "requirements-base.txt non trovato"
     exit 1
 }
 
@@ -148,100 +157,10 @@ STREAMLIT_PORT=8501
 Write-Success "Configurazione completata"
 
 # ============================================================================
-# STEP 5: Mostra istruzioni di avvio
+# STEP 5: Avvio Applicazione
 # ============================================================================
 
-Write-Header "STEP 5: Avvio Applicazione"
-
-Write-Host "Scegli come avviare l'applicazione:" @Yellow
-Write-Host ""
-Write-Host "  1️⃣  Avvio completo (Streamlit + Backend)" -ForegroundColor Cyan
-Write-Host "  2️⃣  Solo Streamlit (Frontend)" -ForegroundColor Cyan
-Write-Host "  3️⃣  Solo Backend (API)" -ForegroundColor Cyan
-Write-Host "  4️⃣  Test connessione MongoDB" -ForegroundColor Cyan
-Write-Host "  5️⃣  Esci" -ForegroundColor Cyan
-Write-Host ""
-
-$choice = Read-Host "Seleziona un'opzione (1-5)"
-
-switch ($choice) {
-    "1" {
-        Write-Header "Avvio Completo: Streamlit + Backend"
-        
-        Write-Info "Il backend sarà disponibile su: http://localhost:8000"
-        Write-Info "Streamlit sarà disponibile su: http://localhost:8501"
-        Write-Host ""
-        
-        Write-Host "Scegli come avviare:" @Yellow
-        Write-Host "  A) In 2 terminali separati (consigliato)" -ForegroundColor Cyan
-        Write-Host "  B) Avvia solo backend, lancio manuale Streamlit" -ForegroundColor Cyan
-        Write-Host ""
-        
-        $launchChoice = Read-Host "Seleziona (A/B)"
-        
-        if ($launchChoice -eq "A" -or $launchChoice -eq "a") {
-            Write-Host ""
-            Write-Info "Apertura terminali separati..."
-            
-            # Backend in nuovo terminale
-            Write-Success "Avvio Backend..."
-            Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$pwd'; .\.venv\Scripts\Activate.ps1; $env:PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION='python'; python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000 --app-dir backend"
-            
-            Start-Sleep -Seconds 3
-            
-            # Streamlit in nuovo terminale
-            Write-Success "Avvio Streamlit..."
-            Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$pwd'; .\.venv\Scripts\Activate.ps1; python -m streamlit run app.py"
-            
-            Write-Host ""
-            Write-Success "✨ Molti saluti! L'app è in avvio..."
-            Write-Info "Backend: http://localhost:8000/docs"
-            Write-Info "Streamlit: http://localhost:8501"
-        } else {
-            Write-Host ""
-            Write-Info "Avvio Backend..."
-            $env:PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python"
-            python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000 --app-dir backend
-        }
-    }
-    
-    "2" {
-        Write-Header "Avvio Streamlit (Frontend)"
-        Write-Info "Streamlit sarà disponibile su: http://localhost:8501"
-        Write-Host ""
-        python -m streamlit run app.py
-    }
-    
-    "3" {
-        Write-Header "Avvio Backend (API)"
-        Write-Info "Backend sarà disponibile su: http://localhost:8000"
-        Write-Info "Documentazione API: http://localhost:8000/docs"
-        Write-Host ""
-        $env:PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python"
-        python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000 --app-dir backend
-    }
-    
-    "4" {
-        Write-Header "Test Connessione MongoDB"
-        Write-Info "Esecuzione test MongoDB..."
-        Write-Host ""
-        
-        if (Test-Path "verify_mongodb.py") {
-            python verify_mongodb.py
-        } elseif (Test-Path "tests/verify_mongodb.py") {
-            python tests/verify_mongodb.py
-        } else {
-            Write-Error-Custom "Script verify_mongodb.py non trovato"
-        }
-    }
-    
-    "5" {
-        Write-Info "Uscita"
-        exit 0
-    }
-    
-    default {
-        Write-Error-Custom "Opzione non valida"
-        exit 1
-    }
-}
+Write-Header "SETUP COMPLETATO"
+Write-Info "Avvio app (PowerShell): .\start.ps1"
+Write-Info "Avvio app (CMD): start.bat"
+Write-Info "Extras opzionali: SM_FULL=1 .\setup.ps1"

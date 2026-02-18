@@ -1,0 +1,4 @@
+# Optional extras (DB/AI)
+motor==3.7.0
+pymongo==4.10.1
+google-generativeai==0.3.2

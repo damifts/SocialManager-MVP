@@ -18,6 +18,11 @@ Complete guide for Social Manager MVP.
 - **[../setup.bat](../setup.bat)** - Windows CMD
 - **[../setup.sh](../setup.sh)** - Mac/Linux Bash
 
+### Start Scripts
+- **[../start.ps1](../start.ps1)** - Windows PowerShell
+- **[../start.bat](../start.bat)** - Windows CMD
+- **[../start.sh](../start.sh)** - Mac/Linux Bash
+
 ### Technical Details
 - **[BACKEND.md](BACKEND.md)** - Backend architecture
 - **[API.md](API.md)** - API reference

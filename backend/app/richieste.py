@@ -1,120 +1,72 @@
-import httpx
 import os
+
+import httpx
 from dotenv import load_dotenv
 
 
 load_dotenv()
 
-Token_segreto = os.getenv("INSTAGRAM_ACCESS_TOKEN")
+TOKEN_SEGRETO = os.getenv("INSTAGRAM_ACCESS_TOKEN", "")
+BASE_URL = "https://graph.instagram.com/v24.0"
+DEFAULT_TIMEOUT = httpx.Timeout(10.0, connect=5.0)
 
 
-class richiesteClass:
+def _auth_headers() -> dict:
+    return {
+        "Authorization": f"Bearer {TOKEN_SEGRETO}",
+        "Accept": "application/json",
+        "Content-type": "application/json",
+    }
 
 
-  def retriveUserReq():
-   url_base = "https://graph.instagram.com/v24.0/me"
-  
-   params = {"fields":
-             "user_id,username,profile_picture_url,followers_count", 
-             "access_token":Token_segreto,
-   }
-  
-  
-   try:
-  
-  
-     req = httpx.get(url=url_base,params=params)
-     req.raise_for_status()
-  
-     res = req.json()
-  
-     return res
-  
-   except Exception:
-    return False
-  
-
- 
-  def CreateMediaReq(url_risorsa : str, caption : str, user_id : str):
-
-      url_base = f"https://graph.instagram.com/v24.0/{user_id}/media"
-      headers = {
-      
-      "Authorization": f"Bearer {Token_segreto}",
-      "Accept" : "application/json",
-      "Content-type": "application/json",
-      
-        }
-
-      payload = {
-      "image_url" : url_risorsa,
-      "caption": caption
-      
-        }
-      
-      try:
-      
-        req = httpx.post(url=url_base,headers=headers,json=payload, timeout=30.0)
-
-        req.raise_for_status()
-
-        res = req.json()
-
-        return res
-      except Exception:
-        return False
-
-
-
-
-
-  def PostMediaReq(user_id : str,media_id : str):
-      url_base = f"https://graph.instagram.com/v24.0/{user_id}/media_publish"
-
-      headers = {
-    
-      "Authorization": f"Bearer {Token_segreto}",
-      "Accept" : "application/json",
-      "Content-type": "application/json",
-    
-        }
-
-      payload = {
-      "creation_id" : media_id,
-      }
-
-      try:
-
-        req = httpx.post(url=url_base, params=payload,headers=headers)
-
-        req.raise_for_status()
-
-        res = req.json()
-
-        return res
-      
-      except Exception:
-       return False
-  
-
-  def getAllPost(user_id : str):
-    url_base = f"https://graph.instagram.com/v24.0/{user_id}/media"
-
-    params = {
-      "fields": "id,caption,media_url",
-      "access_token": Token_segreto,
-      "limit": 20,
-        }
-    
+def _safe_request(method: str, url: str, **kwargs):
     try:
-    
-      req = httpx.get(url=url_base, params=params)
+        response = httpx.request(method, url, timeout=DEFAULT_TIMEOUT, **kwargs)
+        response.raise_for_status()
+        return response.json()
+    except httpx.HTTPError:
+        return None
 
-      req.raise_for_status()
 
-      ris = req.json()
+class RichiesteClient:
+    @staticmethod
+    def retrieve_user():
+        if not TOKEN_SEGRETO:
+            return None
+        url = f"{BASE_URL}/me"
+        params = {
+            "fields": "user_id,username,profile_picture_url,followers_count",
+            "access_token": TOKEN_SEGRETO,
+        }
+        return _safe_request("GET", url, params=params)
 
-      return ris
+    @staticmethod
+    def create_media(url_risorsa: str, caption: str, user_id: str):
+        if not TOKEN_SEGRETO:
+            return None
+        url = f"{BASE_URL}/{user_id}/media"
+        payload = {"image_url": url_risorsa, "caption": caption}
+        return _safe_request("POST", url, headers=_auth_headers(), json=payload)
 
-    except Exception:
-      return False
+    @staticmethod
+    def publish_media(user_id: str, media_id: str):
+        if not TOKEN_SEGRETO:
+            return None
+        url = f"{BASE_URL}/{user_id}/media_publish"
+        payload = {"creation_id": media_id}
+        return _safe_request("POST", url, headers=_auth_headers(), params=payload)
+
+    @staticmethod
+    def get_all_posts(user_id: str):
+        if not TOKEN_SEGRETO:
+            return None
+        url = f"{BASE_URL}/{user_id}/media"
+        params = {
+            "fields": "id,caption,media_url",
+            "access_token": TOKEN_SEGRETO,
+            "limit": 20,
+        }
+        return _safe_request("GET", url, params=params)
+
+
+richiesteClass = RichiesteClient

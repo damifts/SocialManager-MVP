@@ -13,6 +13,7 @@ Questa guida è pensata per i colleghi che vogliono avviare l'app **senza compli
 # 2. Esegui:
 
 .\setup.ps1
+\start.ps1
 ```
 
 ### Windows - Prompt dei comandi
@@ -22,6 +23,7 @@ Questa guida è pensata per i colleghi che vogliono avviare l'app **senza compli
 # 2. Esegui:
 
 setup.bat
+start.bat
 ```
 
 ### Linux/Mac (Bash)
@@ -31,6 +33,7 @@ setup.bat
 # 2. Esegui:
 
 bash setup.sh
+bash start.sh
 
 # Se non funziona, dai i permessi:
 chmod +x setup.sh
@@ -44,34 +47,32 @@ Lo script automatico fa **tutto questo per te**:
 
 ✅ Verifica che Python sia installato  
 ✅ Crea ambiente virtuale Python  
-✅ Installa tutte le dipendenze  
+✅ Installa dipendenze **base** (setup rapido)  
 ✅ Configura il file `.env`  
-✅ Avvia l'applicazione  
+✅ Avvio separato con `start.*`  
 
 **Risultato:** Invece di 10-15 minuti di comandi, **1 click per avviare l'app**.
 
 ---
 
-## 🎯 Opzioni di Avvio
+## ▶️ Avvio Applicazione
 
-Dopo aver eseguito lo script, scegli come avviare:
+Dopo il setup, avvia l'app con lo script dedicato:
 
-### 1️⃣ **Avvio Completo** (Consigliato) 
-- Frontend Streamlit (`http://localhost:8501`)
-- Backend API (`http://localhost:8000`)
-- Avvia in 2 finestre separate automaticamente
+```powershell
+# PowerShell
+.\start.ps1
+```
 
-### 2️⃣ **Solo Frontend (Streamlit)**
-- Utile se il Backend è già avviato
-- Accedi a `http://localhost:8501`
+```cmd
+:: CMD
+start.bat
+```
 
-### 3️⃣ **Solo Backend (API)**
-- Utile per lo sviluppo del backend
-- Accedi a `http://localhost:8000/docs` per la documentazione interattiva
-
-### 4️⃣ **Test MongoDB**
-- Verifica che il database sia raggiungibile
-- Testa la connessione MONGO_URI
+```bash
+# Mac/Linux
+bash start.sh
+```
 
 ---
 
@@ -145,7 +146,7 @@ netstat -ano | findstr :8501
 **Soluzione:**
 ```powershell
 # Lo script di setup deve averlo installato, ma se capita:
-pip install -r requirements.txt
+pip install -r requirements-base.txt
 ```
 
 ### ❌ "Errore di connessione MongoDB"
@@ -153,7 +154,7 @@ pip install -r requirements.txt
 **Soluzione:**
 1. Controlla che MongoDB sia in esecuzione
 2. Verifica che `MONGO_URI` nel `.env` sia corretto
-3. Esegui l'opzione "Test MongoDB" dello script per diagnosticare
+3. Esegui il test di connessione: `python tests/verify_mongodb.py`
 
 ---
 
@@ -203,7 +204,10 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 
 # 3. Installa dipendenze
-pip install -r requirements.txt
+pip install -r requirements-base.txt
+
+# (Opzionale) Extras AI/DB
+pip install -r requirements-full.txt
 
 # 4. Imposta variabili d'ambiente
 $env:PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python"

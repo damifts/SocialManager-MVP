@@ -10,11 +10,16 @@ Grazie per il contributo al Social Manager MVP!
 # Windows PowerShell
 .\setup.ps1
 
+# Avvio applicazione
+.\start.ps1
+
 # Oppure Windows CMD
 setup.bat
+start.bat
 
 # Oppure Mac/Linux
 bash setup.sh
+bash start.sh
 ```
 
 Leggi **[QUICKSTART.md](QUICKSTART.md)** per guida dettagliata.
@@ -24,7 +29,7 @@ Leggi **[QUICKSTART.md](QUICKSTART.md)** per guida dettagliata.
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # Mac/Linux: .venv\Scripts\activate (Windows)
-pip install -r requirements.txt
+pip install -r requirements-base.txt
 ```
 
 ---
@@ -81,7 +86,9 @@ pip install -r requirements.txt
 
 ```
 app.py              # Streamlit main app
-requirements.txt    # Dipendenze Python
+requirements.txt    # Puntatore a requirements-base.txt
+requirements-base.txt  # Dipendenze base
+requirements-full.txt  # Extras opzionali
 .streamlit/
   config.toml       # Config Streamlit
 backend/

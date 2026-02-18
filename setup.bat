@@ -13,9 +13,9 @@ color 0A
 title SocialManager MVP - Setup
 
 echo.
-echo ╔════════════════════════════════════════════════════════════════╗
-echo ║         SocialManager MVP - Setup & Launch Script              ║
-echo ╚════════════════════════════════════════════════════════════════╝
+echo ================================================================
+echo   SocialManager MVP - Setup ^& Launch Script
+echo ================================================================
 echo.
 
 REM ============================================================================
@@ -25,11 +25,11 @@ REM ============================================================================
 echo [STEP 1] Verifica Python...
 python --version >nul 2>&1
 if errorlevel 1 (
-    echo ❌ Python non trovato. Installa da https://www.python.org
+    echo [ERR] Python non trovato. Installa da https://www.python.org
     exit /b 1
 )
 for /f "tokens=*" %%i in ('python --version 2^>^&1') do set PYTHON_VERSION=%%i
-echo ✅ %PYTHON_VERSION% trovato
+echo [OK]  %PYTHON_VERSION% trovato
 
 REM ============================================================================
 REM STEP 2: Crea/Attiva ambiente virtuale
@@ -39,15 +39,15 @@ echo.
 echo [STEP 2] Ambiente Virtuale...
 
 if exist .venv (
-    echo ℹ️  Ambiente virtuale già esistente
+    echo [INFO] Ambiente virtuale gia esistente
 ) else (
     echo Creazione ambiente virtuale...
     python -m venv .venv
-    echo ✅ Ambiente virtuale creato
+    echo [OK]  Ambiente virtuale creato
 )
 
 call .venv\Scripts\activate.bat
-echo ✅ Ambiente virtuale attivato
+echo [OK]  Ambiente virtuale attivato
 
 REM ============================================================================
 REM STEP 3: Installa dipendenze
@@ -56,13 +56,18 @@ REM ============================================================================
 echo.
 echo [STEP 3] Installazione Dipendenze...
 
-if exist requirements.txt (
-    echo Installazione dipendenze...
-    pip install --upgrade pip setuptools wheel >nul 2>&1
-    pip install -r requirements.txt
-    echo ✅ Dipendenze installate
+if exist requirements-base.txt (
+    echo Installazione dipendenze base...
+    python -m pip install --upgrade pip setuptools wheel >nul 2>&1
+    python -m pip install -r requirements-base.txt
+    if /i "%SM_FULL%"=="1" if exist requirements-full.txt (
+        echo [WARN] Installazione FULL: include extras MongoDB/Gemini.
+        python -m pip install -r requirements-full.txt
+    )
+    echo [OK]  Dipendenze installate
+    echo [INFO] Per extras: set SM_FULL=1 ^& setup.bat
 ) else (
-    echo ❌ requirements.txt non trovato
+    echo [ERR] requirements-base.txt non trovato
     exit /b 1
 )
 
@@ -74,7 +79,7 @@ echo.
 echo [STEP 4] Configurazione Ambiente...
 
 if exist .env (
-    echo ✅ File .env trovato
+    echo [OK]  File .env trovato
 ) else (
     echo Creazione file .env...
     (
@@ -87,77 +92,15 @@ if exist .env (
         echo # Environment
         echo ENVIRONMENT=development
     ) > .env
-    echo ✅ File .env creato. Modifica i valori nel file!
+    echo [OK]  File .env creato. Modifica i valori nel file!
 )
 
 REM ============================================================================
-REM STEP 5: Menu Avvio
+REM STEP 5: Avvio Applicazione
 REM ============================================================================
 
 echo.
-echo [STEP 5] Scegli come avviare l'applicazione:
-echo.
-echo  1 - Avvio completo (Streamlit + Backend)
-echo  2 - Solo Streamlit (Frontend)
-echo  3 - Solo Backend (API)
-echo  4 - Test MongoDB
-echo  5 - Esci
-echo.
-
-set /p CHOICE="Seleziona (1-5): "
-
-if "%CHOICE%"=="1" (
-    echo.
-    echo ℹ️  Backend: http://localhost:8000/docs
-    echo ℹ️  Streamlit: http://localhost:8501
-    echo.
-    echo Opzione A^) Avvia in 2 terminali separati (consigliato^)
-    echo Opzione B^) Avvia solo backend
-    echo.
-    set /p LAUNCH="Seleziona (A/B): "
-    
-    if /i "!LAUNCH!"=="A" (
-        echo ✅ Avvio Backend in nuovo terminale...
-        start cmd /k "cd /d %cd% && .venv\Scripts\activate.bat && set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python && python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000 --app-dir backend"
-        
-        timeout /t 3 /nobreak
-        
-        echo ✅ Avvio Streamlit in nuovo terminale...
-        start cmd /k "cd /d %cd% && .venv\Scripts\activate.bat && python -m streamlit run app.py"
-        
-        echo.
-        echo ✨ L'app è in avvio...
-        timeout /t 2 /nobreak
-        exit /b 0
-    ) else (
-        set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-        python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000 --app-dir backend
-    )
-) else if "%CHOICE%"=="2" (
-    echo.
-    echo ℹ️  Streamlit: http://localhost:8501
-    echo.
-    python -m streamlit run app.py
-) else if "%CHOICE%"=="3" (
-    echo.
-    echo ℹ️  Backend: http://localhost:8000/docs
-    echo.
-    set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-    python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000 --app-dir backend
-) else if "%CHOICE%"=="4" (
-    echo.
-    if exist tests\verify_mongodb.py (
-        python tests\verify_mongodb.py
-    ) else if exist verify_mongodb.py (
-        python verify_mongodb.py
-    ) else (
-        echo ❌ Script verify_mongodb.py non trovato
-    )
-) else if "%CHOICE%"=="5" (
-    exit /b 0
-) else (
-    echo ❌ Opzione non valida
-    exit /b 1
-)
-
-pause
+echo [DONE] Setup completato.
+echo [INFO] Avvio app: start.bat
+echo [INFO] Extras opzionali: set SM_FULL=1 ^& setup.bat
+exit /b 0
