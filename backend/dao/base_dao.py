@@ -32,7 +32,7 @@ class BaseDAO(Generic[T]):
         
         Args:
             collection: Collection MongoDB
-        """
+        """-
         self.collection = collection
     
     
