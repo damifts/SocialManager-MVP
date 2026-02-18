@@ -9,8 +9,12 @@ $ErrorActionPreference = "Stop"
 
 $venvActivate = ".venv\Scripts\Activate.ps1"
 if (-Not (Test-Path $venvActivate)) {
-    Write-Host "[ERR] Ambiente virtuale non trovato. Esegui prima .\setup.ps1"
-    exit 1
+    Write-Host "[WARN] Ambiente virtuale non trovato. Avvio setup automatico..."
+    & ".\setup.ps1"
+    if (-Not (Test-Path $venvActivate)) {
+        Write-Host "[ERR] Ambiente virtuale non trovato dopo il setup. Verifica l'installazione."
+        exit 1
+    }
 }
 
 Write-Host "[INFO] Avvio Backend e Streamlit..."

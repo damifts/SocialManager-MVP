@@ -7,12 +7,10 @@ Piattaforma completa per la **gestione social con automazione AI**. Generazione 
 ### ⚡ Metodo Rapido (Consigliato)
 
 ```powershell
-# Windows PowerShell
-.\setup.ps1
+# Windows PowerShell (un solo comando: setup + avvio)
 .\start.ps1
 
-# Oppure Windows CMD
-setup.bat
+# Oppure Windows CMD (un solo comando: setup + avvio)
 start.bat
 
 # Oppure Mac/Linux
@@ -25,6 +23,8 @@ bash start.sh
 - Installa dipendenze base
 - Configura `.env`
 - Avvio separato con script `start.*`
+
+**Compatibilita Windows:** le dipendenze base sono selezionate per evitare build native; le extra sono opzionali.
 
 👉 **[Leggi QUICKSTART.md per guida dettagliata](QUICKSTART.md)**
 
@@ -87,8 +87,8 @@ Abbiamo creato script automatici per tutte le piattaforme:
 
 ### Avvio Applicazione
 
-- PowerShell: `./start.ps1`
-- CMD: `start.bat`
+- PowerShell: `./start.ps1` (fa setup se manca)
+- CMD: `start.bat` (fa setup se manca)
 - Mac/Linux: `bash start.sh`
 
 ---

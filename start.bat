@@ -7,8 +7,12 @@ REM Uso: start.bat
 REM ============================================================================
 
 if not exist .venv\Scripts\activate.bat (
-    echo [ERR] Ambiente virtuale non trovato. Esegui prima setup.bat
-    exit /b 1
+    echo [WARN] Ambiente virtuale non trovato. Avvio setup automatico...
+    call setup.bat
+    if not exist .venv\Scripts\activate.bat (
+        echo [ERR] Ambiente virtuale non trovato dopo il setup. Verifica l'installazione.
+        exit /b 1
+    )
 )
 
 echo [INFO] Avvio Backend e Streamlit...
