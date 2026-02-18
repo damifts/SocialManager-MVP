@@ -5,21 +5,36 @@ Issue #16, #20-25: Implementazione CRUD per Post
 Estende BaseDAO con metodi specifici per Post
 """
 
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional,TypedDict
 from datetime import datetime
 from .base_dao import BaseDAO
 from ..database import get_database
-
-
+from enum import Enum
+class PostStatus(str, Enum):
+    DRAFT = "draft"
+    SCHEDULED = "scheduled"
+    PUBLISHED = "published"
+    FAILED = "failed"
+class PostMetadata(TypedDict):
+    views: int
+    likes: int
+    comments: int
+    shares: int
+class mediaPost:
+        _id: str
+        title: str
+        content: str
+        social_targets: str  
+        status: PostStatus    
+        created_at: datetime
+        scheduled_at: datetime
+        published_at: datetime
+        metadata: PostMetadata
 class PostDAO(BaseDAO):
     """
     DAO per gestione Post social
     
-    TODO: Team Backend
-    - Implementare ricerca per social_target
-    - Filtrare per status (draft, scheduled, published)
-    - Query per date range (calendario)
-    - Aggregazioni per analytics
+
     """
     
     def __init__(self):
@@ -33,42 +48,50 @@ class PostDAO(BaseDAO):
     async def create_post(
         self, 
         testo: str, 
-        social_target: str,
-        data_programmazione: Optional[datetime] = None,
-        status: str = "draft"
+        data_programmazione:datetime,
+        status: PostStatus = PostStatus.DRAFT
     ) -> str:
         """
         Issue #21: Crea nuovo post
         
         Args:
             testo: Contenuto del post
-            social_target: Social network target (LinkedIn, Twitter, etc.)
+            social_target: Social network target (Instagram)
             data_programmazione: Data pubblicazione programmata
             status: draft, scheduled, published
             
         Returns:
             str: ID del post creato
-            
-        TODO:
-        - Validare testo (lunghezza per social)
-        - Validare social_target (enum)
-        - Generare preview automatica
+
         """
+        if not testo:
+            raise ValueError("Stringa vuota")
+        
+        if len(testo)>=2200 :
+            raise ValueError("Testo troppo lungo per Instagram, valore massimo: 2200 caretteri")
+        
+        def __str__(testo,length:int = 50)->str:
+            """Genera preview automatica del testo"""
+            return (testo[:length]) if len(testo)> length else testo
+
         post_data = {
             "testo": testo,
-            "social_target": social_target,
             "status": status,
-            "created_at": datetime.utcnow()
+            "created_at": datetime.now(),
+            "updated_at": datetime.now()
         }
         
         if data_programmazione:
             post_data["data_programmazione"] = data_programmazione
+
+            if status == PostStatus.DRAFT:
+                post_data["status"] = PostStatus.SCHEDULED
         
         return await self.insert_one(post_data)
     
     
-    async def get_posts_by_social(self, social_target: str) -> List[Dict[str, Any]]:
-        """
+    """async def get_posts_by_social(self, social_target: str) -> List[Dict[str, Any]]:
+  
         Issue #22: Trova post per social network
         
         Args:
@@ -76,14 +99,14 @@ class PostDAO(BaseDAO):
             
         Returns:
             List[Dict]: Lista post
-        """
+        """"""
         return await self.find_many(
             filter_query={"social_target": social_target},
             sort=[("created_at", -1)]  # Più recenti prima
-        )
+        )"""
     
     
-    async def get_posts_by_status(self, status: str) -> List[Dict[str, Any]]:
+    async def get_posts_by_status(self, status: PostStatus) -> List[Dict[str, Any]]:
         """
         Issue #22: Trova post per status
         
@@ -114,7 +137,7 @@ class PostDAO(BaseDAO):
         Returns:
             List[Dict]: Post programmati
             
-        TODO: Implementare per calendario editoriale (issue #7, #8)
+
         """
         filter_query = {"status": "scheduled"}
         
@@ -160,16 +183,13 @@ class PostDAO(BaseDAO):
         Returns:
             bool: True se pubblicato
             
-        TODO:
-        - Integrare con API social network
-        - Notificare utente
-        - Log pubblicazione
+
         """
         return await self.update_by_id(
             post_id,
             {
                 "status": "published",
-                "published_at": datetime.utcnow()
+                "published_at": datetime.now()
             }
         )
     
@@ -184,11 +204,9 @@ class PostDAO(BaseDAO):
         Returns:
             List[Dict]: Post trovati
             
-        TODO:
-        - Creare text index su MongoDB
-        - Ottimizzare per performance
+
         """
-        # Ricerca semplice con regex (TODO: usare text index)
+
         filter_query = {
             "testo": {"$regex": search_text, "$options": "i"}
         }
@@ -206,7 +224,7 @@ class PostDAO(BaseDAO):
         Returns:
             Dict: Dati aggregati
             
-        TODO: Implementare per dashboard analytics (issue #8)
+
         """
         match_stage = {}
         if social_target:
