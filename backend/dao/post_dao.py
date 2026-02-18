@@ -48,47 +48,43 @@ class PostDAO(BaseDAO):
     async def create_post(
         self, 
         testo: str, 
-        data_programmazione:datetime,
+        data_programmazione: Optional[datetime] = None,
         status: PostStatus = PostStatus.DRAFT
     ) -> str:
-        """
-        Issue #21: Crea nuovo post
+        """Issue #21: Crea nuovo post con validazione Instagram"""
         
-        Args:
-            testo: Contenuto del post
-            social_target: Social network target (Instagram)
-            data_programmazione: Data pubblicazione programmata
-            status: draft, scheduled, published
-            
-        Returns:
-            str: ID del post creato
+        # 1. Validazioni
+        if not testo or not testo.strip():
+            raise ValueError("Il contenuto del post non può essere vuoto")
+        
+        if len(testo) >= 2200:
+            raise ValueError("Testo troppo lungo per Instagram (Max 2200 caratteri)")
 
-        """
-        if not testo:
-            raise ValueError("Stringa vuota")
-        
-        if len(testo)>=2200 :
-            raise ValueError("Testo troppo lungo per Instagram, valore massimo: 2200 caretteri")
-        
-        def __str__(testo,length:int = 50)->str:
-            """Genera preview automatica del testo"""
-            return (testo[:length]) if len(testo)> length else testo
+        # 2. Generazione Preview (Logica corretta)
+        def genera_preview(t: str, length: int = 50) -> str:
+            return t[:length] + "..." if len(t) > length else t
 
+        # 3. Preparazione Dati
+        # Usiamo utcnow() per consistenza del database
         post_data = {
-            "testo": testo,
+            "title": genera_preview(testo, 30), # Usiamo la preview come titolo se manca
+            "content": testo,
             "status": status,
-            "created_at": datetime.now(),
-            "updated_at": datetime.now()
+            "metadata": { # Inizializziamo i metadati a zero
+                "views": 0, "likes": 0, "comments": 0, "shares": 0
+            },
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow()
         }
         
+        # 4. Logica Programmazione
         if data_programmazione:
-            post_data["data_programmazione"] = data_programmazione
-
+            post_data["scheduled_at"] = data_programmazione
+            # Se c'è una data, lo stato diventa automaticamente SCHEDULED
             if status == PostStatus.DRAFT:
                 post_data["status"] = PostStatus.SCHEDULED
         
         return await self.insert_one(post_data)
-    
     
     """async def get_posts_by_social(self, social_target: str) -> List[Dict[str, Any]]:
   
@@ -174,21 +170,11 @@ class PostDAO(BaseDAO):
     
     
     async def publish_post(self, post_id: str) -> bool:
-        """
-        Issue #23: Pubblica post (cambia status e imposta published_at)
-        
-        Args:
-            post_id: ID post
-            
-        Returns:
-            bool: True se pubblicato
-            
-
-        """
+        """Issue #23: Pubblica post e aggiorna timestamp"""
         return await self.update_by_id(
             post_id,
             {
-                "status": "published",
+                "status": PostStatus.PUBLISHED,
                 "published_at": datetime.now()
             }
         )
