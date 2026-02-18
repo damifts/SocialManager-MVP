@@ -1,24 +1,5 @@
-# Python Core
-fastapi==0.115.0
-uvicorn[standard]==0.30.6
-pydantic==2.10.5
-python-dotenv==1.0.1
+# Base dependencies (recommended)
+-r requirements-base.txt
 
-# AI & LangChain (opzionale - legacy)
-langchain==0.3.15
-openai==1.59.6
-
-# AI - Gemini (Issue #15)
-google-generativeai==0.3.2
-
-# Database (Issue #17, #18)
-motor==3.7.0
-pymongo==4.10.1
-
-# Streamlit (Frontend)
-streamlit==1.40.2
-plotly==5.24.1
-pandas==2.2.3
-
-# Utils
-python-dateutil==2.9.0
+# Optional extras (AI/analytics)
+# -r requirements-full.txt

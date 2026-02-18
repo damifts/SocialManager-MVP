@@ -2,6 +2,38 @@
 
 Grazie per il contributo al Social Manager MVP!
 
+## 🚀 Setup Iniziale
+
+### Per Team Members (Setup Rapido)
+
+```powershell
+# Windows PowerShell
+.\setup.ps1
+
+# Avvio applicazione
+.\start.ps1
+
+# Oppure Windows CMD
+setup.bat
+start.bat
+
+# Oppure Mac/Linux
+bash setup.sh
+bash start.sh
+```
+
+Leggi **[QUICKSTART.md](QUICKSTART.md)** per guida dettagliata.
+
+### Per Developers (Setup Manuale)
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Mac/Linux: .venv\Scripts\activate (Windows)
+pip install -r requirements-base.txt
+```
+
+---
+
 ## Flusso di lavoro Git
 
 1. **Crea un branch dedicato** dalla `main`:
@@ -54,7 +86,9 @@ Grazie per il contributo al Social Manager MVP!
 
 ```
 app.py              # Streamlit main app
-requirements.txt    # Dipendenze Python
+requirements.txt    # Puntatore a requirements-base.txt
+requirements-base.txt  # Dipendenze base
+requirements-full.txt  # Extras opzionali
 .streamlit/
   config.toml       # Config Streamlit
 backend/
@@ -80,4 +114,11 @@ pages/              # Streamlit multi-page (se serve)
 
 ## Domande?
 
-Apri una issue o chiedi nel canale del team!
+Vedi la **[Documentazione Completa](README.md#-documentazione-progetto)**:
+- [QUICKSTART.md](QUICKSTART.md) - Guida rapida per team members
+- [docs/API.md](docs/API.md) - API Backend
+- [docs/BACKEND.md](docs/BACKEND.md) - Architettura backend
+- [docs/DATABASE.md](docs/DATABASE.md) - Database schema
+- [scripts/README.md](scripts/README.md) - DevOps & webhooks
+
+O apri una issue nel repository!
