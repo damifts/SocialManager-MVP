@@ -28,9 +28,11 @@ async def connect_to_mongodb(max_retries: int = 3, delay: float = 1.0):
     password = os.getenv("MONGO_DB_PW")
 
     if user and password:
-        MONGO_URI = f"mongodb://{user}:{password}@localhost:27017/{MONGO_DB_NAME}?authSource={MONGO_DB_NAME}"
+        mongo_uri = (
+            f"mongodb://{user}:{password}@localhost:27017/{MONGO_DB_NAME}?authSource={MONGO_DB_NAME}"
+        )
     else:
-        MONGO_URI = f"mongodb://localhost:27017/{MONGO_DB_NAME}"
+        mongo_uri = f"mongodb://localhost:27017/{MONGO_DB_NAME}"
 
     global _mongo_client, _database
 
@@ -38,7 +40,7 @@ async def connect_to_mongodb(max_retries: int = 3, delay: float = 1.0):
     while attempt < max_retries:
         try:
             _mongo_client = AsyncIOMotorClient(
-                MONGO_URI,
+                mongo_uri,
                 serverSelectionTimeoutMS=5000,
                 maxPoolSize=10,
                 minPoolSize=1
