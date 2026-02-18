@@ -4,25 +4,23 @@ Questa guida è pensata per i colleghi che vogliono avviare l'app **senza compli
 
 ---
 
-## ⚡ Quick Start (60 secondi)
+## ⚡ Quick Start (30-60 secondi)
 
 ### Windows - PowerShell (Consigliato)
 
 ```powershell
 # 1. Apri PowerShell nella cartella del progetto
-# 2. Esegui:
+# 2. Esegui un solo comando (fa setup + avvio):
 
-.\setup.ps1
-\start.ps1
+.\start.ps1
 ```
 
 ### Windows - Prompt dei comandi
 
 ```cmd
 # 1. Apri cmd nella cartella del progetto
-# 2. Esegui:
+# 2. Esegui un solo comando (fa setup + avvio):
 
-setup.bat
 start.bat
 ```
 
@@ -57,7 +55,7 @@ Lo script automatico fa **tutto questo per te**:
 
 ## ▶️ Avvio Applicazione
 
-Dopo il setup, avvia l'app con lo script dedicato:
+Su Windows basta lanciare lo script di start: se il setup non e stato fatto, lo esegue automaticamente.
 
 ```powershell
 # PowerShell
@@ -113,6 +111,12 @@ Se vuoi usare il database localmente:
 ```
 
 ---
+
+## ✅ Compatibilita Windows (Importante)
+
+- Le dipendenze base sono scelte per funzionare su Windows senza tool di compilazione.
+- Usa sempre `requirements-base.txt` per il setup standard.
+- Le funzioni extra (MongoDB/Gemini) sono opzionali e richiedono solo chiavi/servizi esterni, non compilazioni locali.
 
 ## 🆘 Troubleshooting
 
@@ -204,10 +208,11 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 
 # 3. Installa dipendenze
-pip install -r requirements-base.txt
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -r requirements-base.txt
 
 # (Opzionale) Extras AI/DB
-pip install -r requirements-full.txt
+python -m pip install -r requirements-full.txt
 
 # 4. Imposta variabili d'ambiente
 $env:PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python"
@@ -219,6 +224,8 @@ python -m uvicorn main:app --reload --app-dir backend --port 8000
 # 5b. In un altro terminale, avvia Streamlit
 python -m streamlit run app.py
 ```
+
+**Nota integrazione manuale:** avvia sempre backend e frontend in due terminali separati per avere API e UI attive insieme.
 
 ---
 

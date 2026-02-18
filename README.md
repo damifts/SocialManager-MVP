@@ -7,12 +7,10 @@ Piattaforma completa per la **gestione social con automazione AI**. Generazione 
 ### ⚡ Metodo Rapido (Consigliato)
 
 ```powershell
-# Windows PowerShell
-.\setup.ps1
+# Windows PowerShell (un solo comando: setup + avvio)
 .\start.ps1
 
-# Oppure Windows CMD
-setup.bat
+# Oppure Windows CMD (un solo comando: setup + avvio)
 start.bat
 
 # Oppure Mac/Linux
@@ -26,9 +24,15 @@ bash start.sh
 - Configura `.env`
 - Avvio separato con script `start.*`
 
+**Compatibilita Windows:** le dipendenze base sono selezionate per evitare build native; le extra sono opzionali.
+
+**Appunto installazione sicura (stack Windows):** usa sempre `requirements-base.txt` e installa con `python -m pip install --upgrade pip setuptools wheel` seguito da `python -m pip install -r requirements-base.txt`. Le dipendenze extra vanno installate solo se servono (AI/DB).
+
 👉 **[Leggi QUICKSTART.md per guida dettagliata](QUICKSTART.md)**
 
 ### Metodo Manuale (Alternativa)
+
+**Si, puoi installare manualmente e integrare tutto (frontend + backend).**
 
 ```bash
 # 1. Clone e setup
@@ -38,7 +42,11 @@ python -m venv .venv
 .venv\Scripts\activate  # Windows / source .venv/bin/activate (Mac/Linux)
 
 # 2. Installa dipendenze
-pip install -r requirements-base.txt
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -r requirements-base.txt
+
+# (Opzionale) Extras AI/DB
+python -m pip install -r requirements-full.txt
 
 # 3. Avvia (in due terminali)
 streamlit run app.py              # Terminal 1: Frontend (http://localhost:8501)
@@ -87,8 +95,8 @@ Abbiamo creato script automatici per tutte le piattaforme:
 
 ### Avvio Applicazione
 
-- PowerShell: `./start.ps1`
-- CMD: `start.bat`
+- PowerShell: `./start.ps1` (fa setup se manca)
+- CMD: `start.bat` (fa setup se manca)
 - Mac/Linux: `bash start.sh`
 
 ---
